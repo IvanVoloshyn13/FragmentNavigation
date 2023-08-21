@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="24dp">
+
+    </androidx.constraintlayout.widget.Guideline>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_begin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="24dp">
+
+    </androidx.constraintlayout.widget.Guideline>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/Form"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/FormHintTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_the_application"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/tv_hint_app_name"
+            style="@style/HintTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/application_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_title">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/tv_hint_version_name"
+            style="@style/HintTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/version_name"
+            app:layout_constraintStart_toStartOf="@id/tv_hint_app_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_hint_app_name">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/tv_hint_version_code"
+            style="@style/HintTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/version_code"
+            app:layout_constraintStart_toStartOf="@id/tv_hint_app_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_hint_version_name">
+
+        </TextView>
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="tv_hint_app_name,tv_hint_version_code,tv_hint_version_name" />
+
+        <TextView
+            android:id="@+id/tv_value_app_name"
+            style="@style/HintTextView.Value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_navigation_example"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv_hint_app_name"
+            app:layout_constraintStart_toStartOf="@id/barrier">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/tv_value_version_name"
+            style="@style/HintTextView.Value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1.0.0"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv_hint_version_name"
+            app:layout_constraintStart_toStartOf="@id/barrier">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/tv_value_version_code"
+            style="@style/HintTextView.Value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv_hint_version_code"
+            app:layout_constraintStart_toStartOf="@id/barrier">
+
+        </TextView>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:text="@string/ok"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_hint_version_code">
+
+        </Button>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

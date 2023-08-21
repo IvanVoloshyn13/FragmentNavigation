@@ -10,6 +10,7 @@
     <string name="version_code">Version Code:</string>
     <string name="fragment_navigation_example">Fragment Navigation Example</string>
     <string name="box">Box</string>
+    <string name="ok">Ok</string>
     <string name="select_box">Select Box</string>
     <string name="select_boxes_number">Select the number of boxes:</string>
     <string name="confirm">Confirm</string>
