@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FragmentNavigation</string>
+    <string name="app_name">Fragment Navigation</string>
     <string name="open_box">Open Box</string>
     <string name="options">Options</string>
     <string name="exit">Exit</string>
