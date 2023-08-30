@@ -9,8 +9,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.BuildCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.LifecycleOwner
 import com.example.fragmentnavigation.contract.Navigator
 import com.example.fragmentnavigation.contract.Options
@@ -88,7 +90,12 @@ class MainActivity : AppCompatActivity(), Navigator {
     }
 
     override fun <T : Parcelable> publishResult(result: T) {
-        TODO("Not yet implemented")
+        val bundle = Bundle()
+        bundle.putParcelable(KEY_RESULT, result)
+        supportFragmentManager.setFragmentResult(
+            result.javaClass.name,
+            bundle
+        )
     }
 
     override fun <T : Parcelable> listenResult(
@@ -96,7 +103,13 @@ class MainActivity : AppCompatActivity(), Navigator {
         owner: LifecycleOwner,
         listener: ResultListener<T>
     ) {
-        TODO("Not yet implemented")
+        supportFragmentManager.setFragmentResultListener(
+            clazz.name,
+            owner,
+            FragmentResultListener { key, bundle ->
+                listener.invoke(bundle.getParcelable(KEY_RESULT)!!)
+            }
+        )
     }
 
     private fun launchFragment(fragment: Fragment) {
@@ -108,5 +121,10 @@ class MainActivity : AppCompatActivity(), Navigator {
 
     private fun updateUi() {
 
+    }
+
+    companion object {
+        @JvmStatic
+        private val KEY_RESULT = "RESULT"
     }
 }
