@@ -1,5 +1,6 @@
 package com.example.fragmentnavigation.fragments
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,12 +12,32 @@ import com.example.fragmentnavigation.databinding.FragmentMenuBinding
 
 class MenuFragment : Fragment() {
 
+    private lateinit var options: Options
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        options = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                savedInstanceState?.getParcelable(KEY_OPTIONS) ?: Options.DEFAULT
+                ?: throw IllegalArgumentException("You need to specify options to launch this fragment")
+            } else {
+                savedInstanceState?.getParcelable(KEY_OPTIONS, Options::class.java)
+                    ?: arguments?.getParcelable(
+                        KEY_OPTIONS, Options::class.java
+                    )
+                    ?: throw IllegalArgumentException("You need to specify options to launch this fragment")
+            }
+    }
+
     private val binding by lazy { FragmentMenuBinding.inflate(layoutInflater) }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        navigator().listenResult(Options::class.java, viewLifecycleOwner) {
+            this.options = it
+        }
         return binding.root
     }
 
@@ -26,7 +47,11 @@ class MenuFragment : Fragment() {
             navigator().showAboutScreen()
         }
         binding.optionsButton.setOnClickListener {
-            navigator().showOptionsScreen(options = Options(4, true))
+            navigator().showOptionsScreen(options = options)
         }
+    }
+
+    companion object {
+        @JvmStatic private val KEY_OPTIONS = "OPTIONS"
     }
 }

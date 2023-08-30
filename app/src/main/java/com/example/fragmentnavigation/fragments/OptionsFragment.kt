@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.core.os.BuildCompat
@@ -47,6 +48,9 @@ class OptionsFragment : Fragment(), HasCustomTitle, HasCustomAction {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setupSpinner()
+        setupCheckBox()
+        updateUi()
         return binding.root
 
 
@@ -55,13 +59,53 @@ class OptionsFragment : Fragment(), HasCustomTitle, HasCustomAction {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.cancelButton.setOnClickListener { }
-        binding.confirmButton.setOnClickListener {onConfirmPressed() }
+        binding.confirmButton.setOnClickListener { onConfirmPressed() }
     }
 
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelable(KEY_OPTIONS, options)
+    }
+
+    private fun setupSpinner() {
+        boxCountItem =
+            (1..6).map { BoxCountItem(it, resources.getQuantityString(R.plurals.boxes, it, it)) }
+        adapter = ArrayAdapter(
+            requireContext(),
+            R.layout.item_spinner,
+            boxCountItem
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_activated_1)
+        binding.boxCountSpinner.adapter = adapter
+        binding.boxCountSpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val count = boxCountItem[position].count
+                    options = options.copy(boxCount = count)
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                }
+
+            }
+    }
+
+    private fun setupCheckBox() {
+        binding.enableTimerCheckBox.setOnClickListener {
+            options = options.copy(isTimerEnabled = binding.enableTimerCheckBox.isChecked)
+        }
+    }
+
+    private fun updateUi() {
+        binding.enableTimerCheckBox.isChecked = options.isTimerEnabled
+        val currentIndex = boxCountItem.indexOfFirst { it.count == options.boxCount }
+        binding.boxCountSpinner.setSelection(currentIndex)
     }
 
 
@@ -80,7 +124,7 @@ class OptionsFragment : Fragment(), HasCustomTitle, HasCustomAction {
     }
 
     private fun onConfirmPressed() {
-      //  navigator().publishResult(options)
+        navigator().publishResult(options)
         navigator().goBack()
     }
 
