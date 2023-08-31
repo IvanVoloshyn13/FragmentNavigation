@@ -58,7 +58,7 @@ class OptionsFragment : Fragment(), HasCustomTitle, HasCustomAction {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.cancelButton.setOnClickListener { }
+        binding.cancelButton.setOnClickListener { navigator().goBack()}
         binding.confirmButton.setOnClickListener { onConfirmPressed() }
     }
 
