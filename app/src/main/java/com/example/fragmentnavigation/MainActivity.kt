@@ -19,6 +19,7 @@ import com.example.fragmentnavigation.contract.Options
 import com.example.fragmentnavigation.contract.ResultListener
 import com.example.fragmentnavigation.databinding.ActivityMainBinding
 import com.example.fragmentnavigation.fragments.AboutFragment
+import com.example.fragmentnavigation.fragments.BoxFragment
 import com.example.fragmentnavigation.fragments.BoxSelectionFragment
 import com.example.fragmentnavigation.fragments.MenuFragment
 import com.example.fragmentnavigation.fragments.OptionsFragment
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity(), Navigator {
     }
 
     override fun showBoxSelectionScreen(options: Options) {
-        launchFragment(BoxSelectionFragment())
+        launchFragment(BoxSelectionFragment.newInstance(options))
     }
 
     override fun showOptionsScreen(options: Options) {
@@ -71,7 +72,7 @@ class MainActivity : AppCompatActivity(), Navigator {
     }
 
     override fun showCongratulationsScreen() {
-        TODO("Not yet implemented")
+        launchFragment(BoxFragment())
     }
 
     override fun goBack() {

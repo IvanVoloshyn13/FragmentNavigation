@@ -17,15 +17,15 @@ class MenuFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         options = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-                savedInstanceState?.getParcelable(KEY_OPTIONS) ?: Options.DEFAULT
+            savedInstanceState?.getParcelable(KEY_OPTIONS) ?: Options.DEFAULT
+            ?: throw IllegalArgumentException("You need to specify options to launch this fragment")
+        } else {
+            savedInstanceState?.getParcelable(KEY_OPTIONS, Options::class.java)
+                ?: arguments?.getParcelable(
+                    KEY_OPTIONS, Options::class.java
+                )
                 ?: throw IllegalArgumentException("You need to specify options to launch this fragment")
-            } else {
-                savedInstanceState?.getParcelable(KEY_OPTIONS, Options::class.java)
-                    ?: arguments?.getParcelable(
-                        KEY_OPTIONS, Options::class.java
-                    )
-                    ?: throw IllegalArgumentException("You need to specify options to launch this fragment")
-            }
+        }
     }
 
     private val binding by lazy { FragmentMenuBinding.inflate(layoutInflater) }
@@ -41,17 +41,31 @@ class MenuFragment : Fragment() {
         return binding.root
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(KEY_OPTIONS, options)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.aboutButton.setOnClickListener {
             navigator().showAboutScreen()
         }
         binding.optionsButton.setOnClickListener {
             navigator().showOptionsScreen(options = options)
         }
+        binding.openBoxButton.setOnClickListener {
+            navigator().showBoxSelectionScreen(options)
+        }
+
+        binding.exitButton.setOnClickListener {
+            navigator().goBack()
+        }
     }
 
     companion object {
-        @JvmStatic private val KEY_OPTIONS = "OPTIONS"
+        @JvmStatic
+        private val KEY_OPTIONS = "OPTIONS"
     }
 }
