@@ -1,19 +1,26 @@
 package com.example.fragmentnavigation
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
+import android.view.MenuItem
 import android.view.View
 import android.window.OnBackInvokedCallback
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.os.BuildCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.LifecycleOwner
+import com.example.fragmentnavigation.contract.CustomAction
+import com.example.fragmentnavigation.contract.HasCustomAction
+import com.example.fragmentnavigation.contract.HasCustomTitle
 import com.example.fragmentnavigation.contract.Navigator
 import com.example.fragmentnavigation.contract.Options
 import com.example.fragmentnavigation.contract.ResultListener
@@ -121,7 +128,40 @@ class MainActivity : AppCompatActivity(), Navigator {
     }
 
     private fun updateUi() {
+        val fragment = currentFragment
 
+        if (fragment is HasCustomTitle) {
+            binding.toolbar.setTitle(getString(fragment.getTitleRes()))
+        } else {
+            binding.toolbar.title = getString(R.string.fragment_navigation_example)
+        }
+
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setDisplayShowHomeEnabled(true)
+        } else {
+            supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            supportActionBar?.setDisplayShowHomeEnabled(false)
+        }
+
+        if (fragment is HasCustomAction) {
+            createCustomToolbarAction(fragment.getCustomAction())
+        } else {
+            binding.toolbar.menu.clear()
+        }
+    }
+
+    private fun createCustomToolbarAction(action: CustomAction) {
+        binding.toolbar.menu.clear()
+        val iconDrawable = DrawableCompat.wrap(ContextCompat.getDrawable(this, action.iconRes)!!)
+        iconDrawable.setTint(Color.WHITE)
+        val menuItem = binding.toolbar.menu.add(action.textRes)
+        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        menuItem.icon = iconDrawable
+        menuItem.setOnMenuItemClickListener {
+            action.onCustomAction.run()
+            return@setOnMenuItemClickListener true
+        }
     }
 
     companion object {
